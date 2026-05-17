@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics • Crowdlytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #e0f2fe, #f1f5f9);
+        }
+
+        .layout { display: flex; }
+
+        .sidebar {
+            width: 230px;
+            background: linear-gradient(180deg, #1d4ed8, #1e40af);
+            min-height: 100vh;
+            color: white;
+            padding: 25px;
+            position: fixed;
+        }
+
+        .sidebar h2 { text-align: center; margin-bottom: 30px; }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover, .sidebar .active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 600;
+            color: #1d4ed8;
+            margin-bottom: 25px;
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 220px;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1d4ed8;
+        }
+
+        .analytics-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        canvas { max-height: 320px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width:768px){
+            .sidebar { position: relative; width:100%; min-height:auto; }
+            .main { margin-left:0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>🚀 Crowdlytics</h2>
+        <a href="/dashboard">🏠 Live Dashboard</a>
+        <a href="/analytics" class="active">📊 Analytics</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="page-title">
+            📊 Crowd Analytics (Last 1 Hour)
+        </div>
+
+        <!-- ===== STAT CARDS ===== -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Check-ins</h3>
+                <div class="stat-value" id="totalVisits">0</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Peak Hour</h3>
+                <div class="stat-value" id="peakHour">--</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Busiest Place</h3>
+                <div class="stat-value" id="busiestPlace">--</div>
+            </div>
+        </div>
+
+        <!-- ===== GRAPH ===== -->
+        <div class="analytics-card">
+            <canvas id="analyticsChart"></canvas>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+const rawData = {{ data | tojson }};
+
+const places = [...new Set(rawData.map(d => d.place))];
+const hours = [...new Set(rawData.map(d => d.hour))].sort();
+
+/* ===== STAT CALCULATIONS ===== */
+
+let totalVisits = rawData.reduce((sum, item) => sum + item.count, 0);
+
+let peak = rawData.reduce((max, item) => item.count > max.count ? item : max, {count:0});
+let busiest = {};
+
+rawData.forEach(item => {
+    busiest[item.place] = (busiest[item.place] || 0) + item.count;
+});
+
+let busiestPlace = Object.keys(busiest).reduce((a,b)=>busiest[a]>busiest[b]?a:b);
+
+/* ===== ANIMATE NUMBERS ===== */
+function animateValue(id, start, end, duration) {
+    let range = end - start;
+    let current = start;
+    let increment = end > start ? 1 : -1;
+    let stepTime = Math.abs(Math.floor(duration / range));
+    let obj = document.getElementById(id);
+    let timer = setInterval(function() {
+        current += increment;
+        obj.innerText = current;
+        if (current == end) clearInterval(timer);
+    }, stepTime);
+}
+
+animateValue("totalVisits", 0, totalVisits, 800);
+
+document.getElementById("peakHour").innerText = peak.hour + ":00";
+document.getElementById("busiestPlace").innerText = busiestPlace;
+
+/* ===== CHART ===== */
+
+function getCounts(place) {
+    return hours.map(h => {
+        const item = rawData.find(d => d.place === place && d.hour === h);
+        return item ? item.count : 0;
+    });
+}
+
+const colors = {
+    "Library": "#2563eb",
+    "Canteen": "#ec4899",
+    "Gym": "#f59e0b"
+    "Park":"#f59e1b"
+};
+
+const datasets = places.map(place => ({
+    label: place,
+    data: getCounts(place),
+    borderColor: colors[place] || "#000",
+    backgroundColor: colors[place] + "33",
+    fill: true,
+    tension: 0.4,
+    borderWidth: 3
+}));
+
+new Chart(document.getElementById('analyticsChart'), {
+    type: 'line',
+    data: {
+        labels: hours.map(h => h + ":00"),
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' }
+        },
+        scales: {
+            x: { title: { display: true, text: 'Hour' }},
+            y: { title: { display: true, text: 'Check-ins' }, beginAtZero: true }
+        }
+    }
+});
+
+</script>
+
+</body>
+</html>

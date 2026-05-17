@@ -1,0 +1,298 @@
+/* ============================= */
+/* GLOBAL RESET */
+/* ============================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e0f2fe, #f1f5f9);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ============================= */
+/* AUTH PAGES */
+/* ============================= */
+
+.auth-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    width: 380px;
+    background: white;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    animation: fadeIn 0.6s ease;
+}
+
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1d4ed8;
+}
+
+.auth-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border 0.2s ease;
+}
+
+.auth-card input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.auth-card button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1d4ed8;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-card button:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.auth-link a {
+    color: #1d4ed8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ============================= */
+/* SIDEBAR */
+/* ============================= */
+
+.sidebar {
+    width: 230px;
+    background: linear-gradient(180deg, #1d4ed8, #1e40af);
+    min-height: 100vh;
+    color: white;
+    padding: 25px;
+    position: fixed;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 35px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 10px 14px;
+    margin: 10px 0;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.sidebar a:hover,
+.sidebar .active {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ============================= */
+/* MAIN CONTENT */
+/* ============================= */
+
+.main {
+    margin-left: 250px;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* 👈 centers all content */
+}
+
+
+.navbar {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1d4ed8;
+    margin-bottom: 25px;
+}
+
+.welcome {
+    text-align: center;
+}
+
+.prediction-box {
+    margin: 20px auto;
+}
+
+
+/* ============================= */
+/* CARDS */
+/* ============================= */
+
+.container {
+    display: flex;
+    justify-content: center;   /* 👈 centers horizontally */
+    align-items: center;       /* 👈 centers vertically inside row */
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+
+.card {
+    width: 280px;
+    background: white;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.card h2 {
+    margin-bottom: 10px;
+    color: #1d4ed8;
+}
+
+.info {
+    font-size: 14px;
+    color: #475569;
+    margin: 6px 0;
+}
+
+/* ============================= */
+/* STATUS BADGES */
+/* ============================= */
+
+.status {
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.low { background: #d1fae5; color: #065f46; }
+.medium { background: #fef9c3; color: #854d0e; }
+.high { background: #fee2e2; color: #991b1b; }
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.checkin { background: #2563eb; }
+.checkout { background: #ef4444; }
+
+/* ============================= */
+/* FADE IN */
+/* ============================= */
+
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+
+.dark-mode {
+    background: #0f172a;
+    color: #f1f5f9;
+}
+
+.dark-mode body {
+    background: #0f172a;
+}
+
+.dark-mode .card,
+.dark-mode .auth-card {
+    background: #1e293b;
+    color: white;
+}
+
+.dark-mode .sidebar {
+    background: linear-gradient(180deg, #0f172a, #1e293b);
+}
+
+.dark-mode .navbar {
+    color: #60a5fa;
+}
+
+.dark-mode input {
+    background: #334155;
+    color: white;
+    border: 1px solid #475569;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 95%;
+    }
+}

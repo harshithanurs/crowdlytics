@@ -1,0 +1,41 @@
+<h2>Available Places</h2>
+
+<table border="1">
+<tr>
+  <th>Place</th>
+  <th>Capacity</th>
+  <th>Current Occupancy</th>
+  <th>Status</th>
+</tr>
+
+{% for place in places %}
+<tr>
+  <td>{{ place.name }}</td>
+  <td>{{ place.capacity }}</td>
+  <td>{{ place.occupancy }}</td>
+  <td>
+    {% if place.occupancy < place.capacity * 0.5 %}
+        Low
+    {% elif place.occupancy < place.capacity * 0.8 %}
+        Medium
+    {% else %}
+        High
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Available Places</h2>
+
+<table class="table table-bordered table-striped">
+<tr>
+  <th>Place</th>
+  <th>Capacity</th>
+  <th>Current Occupancy</th>
+  <th>Status</th>
+</tr>
+
+ 

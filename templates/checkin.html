@@ -1,0 +1,21 @@
+@app.route('/checkin/<int:place_id>')
+def checkin(place_id):
+    if 'user' not in session:
+        return redirect('/')
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT id FROM users WHERE username=%s", (session['user'],))
+    user = cursor.fetchone()
+
+    if not user:
+        return "User not found in database!"
+
+    cursor.execute(
+        "INSERT INTO visits (user_id, place_id, checkin_time) VALUES (%s, %s, %s)",
+        (user['id'], place_id, datetime.now())
+    )
+
+    db.commit()
+    return redirect('/dashboard')

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up • Crowdlytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Floating background animation */
+        .bg-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(37,99,235,0.15);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .circle:nth-child(1) {
+            width: 220px;
+            height: 220px;
+            top: 15%;
+            right: 15%;
+        }
+
+        .circle:nth-child(2) {
+            width: 160px;
+            height: 160px;
+            bottom: 10%;
+            left: 10%;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1d4ed8;
+        }
+
+        .dark-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</div>
+
+<div class="bg-animation">
+    <div class="circle"></div>
+    <div class="circle"></div>
+</div>
+
+<div class="auth-container">
+    <div class="auth-card fade-in">
+
+        <div class="logo">🚀 Crowdlytics</div>
+
+        <h2>Create Your Account</h2>
+        <div class="subtitle">Start tracking real-time crowd intelligence</div>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Choose Username" required>
+            <input type="password" name="password" placeholder="Create Password" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="auth-link">
+            Already have an account?
+            <a href="/">Login</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
+
+</body>
+</html>
